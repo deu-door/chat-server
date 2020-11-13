@@ -1,5 +1,6 @@
 package deudoor.chatserver.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import deudoor.chatserver.model.DoorChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,6 @@ public class KafkaSender {
         logger.info("Send data to Kafka");
         logger.info("  Topic={}", message.getTopic());
         logger.info("  Data={}", message);
-        kafkaTemplate.send("lecture", message);
+        kafkaTemplate.send("courses", message);
     }
 }
