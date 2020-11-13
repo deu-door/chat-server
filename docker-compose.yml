@@ -1,5 +1,9 @@
 version: "2"
 services:
+#  chatserver:
+#    image: deu-door/chat-server
+#    network_mode: "host"
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
