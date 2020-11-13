@@ -8,6 +8,6 @@ Additional feature to communicate with students with <strong><a href="https://gi
 
 # Technical Stack
 
-* Java Spring
+* Spring Boot
 * Kafka
 * Stomp (WebSocket)
