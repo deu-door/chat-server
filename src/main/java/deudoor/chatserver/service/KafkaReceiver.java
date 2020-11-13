@@ -3,6 +3,7 @@ package deudoor.chatserver.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import deudoor.chatserver.model.DoorChatMessage;
+import deudoor.chatserver.repository.DoorChatMessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,17 @@ public class KafkaReceiver {
     @Autowired
     private SimpMessagingTemplate template;
 
-    @KafkaListener(id = "main-listener", topics = "lecture")
+    @Autowired
+    private DoorChatMessageRepository doorChatMessageRepository;
+
+    @KafkaListener(id = "main-listener", topics = "courses")
     public void receive(DoorChatMessage message) throws JsonProcessingException {
         logger.info("Receive data from Kafka");
         logger.info("  Topic={}", message.getTopic());
         logger.info("  Data={}", message);
 
-        var msg = new HashMap<String, String>();
-        msg.put("timestamp", Long.toString(message.getTimestamp()));
-        msg.put("message", message.getMessage());
-        msg.put("author", message.getUser());
-        msg.put("authorId", message.getUserId());
+        doorChatMessageRepository.save(message);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(msg);
-
-        template.convertAndSend(message.getTopic(), json);
+        template.convertAndSend(message.getTopic(), new ObjectMapper().writeValueAsString(message));
     }
 }
