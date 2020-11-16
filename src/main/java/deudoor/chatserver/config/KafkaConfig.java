@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import deudoor.chatserver.model.DoorChatMessage;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -18,6 +19,12 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
+    @Value("${server.kafka.host}")
+    private String kafkaHost;
+
+    @Value("${server.kafka.group-id}")
+    private String kafkaGroupId;
+
     @Bean
     public ProducerFactory<String, DoorChatMessage> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs(), null, new JsonSerializer<DoorChatMessage>());
@@ -31,10 +38,10 @@ public class KafkaConfig {
     @Bean
     public Map<String, Object> producerConfigs() {
         return ImmutableMap.<String, Object>builder()
-                .put("bootstrap.servers", "localhost:9092")
+                .put("bootstrap.servers", kafkaHost)
                 .put("key.serializer", IntegerSerializer.class)
                 .put("value.serializer", JsonSerializer.class)
-                .put("group.id", "deu-door-chat-server")
+                .put("group.id", kafkaGroupId)
                 .build();
     }
 
@@ -53,10 +60,10 @@ public class KafkaConfig {
     @Bean
     public Map<String, Object> consumerConfigs() {
         return ImmutableMap.<String, Object>builder()
-                .put("bootstrap.servers", "localhost:9092")
+                .put("bootstrap.servers", kafkaHost)
                 .put("key.deserializer", IntegerDeserializer.class)
                 .put("value.deserializer", JsonDeserializer.class)
-                .put("group.id", "deu-door-chat-server")
+                .put("group.id", kafkaGroupId)
                 .build();
     }
 }
