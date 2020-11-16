@@ -1,7 +1,13 @@
 version: "2"
 services:
-  chatserver:
+  chat-server:
+    container_name: chat-server
     image: deu-door/chat-server
+    depends_on:
+      - "db"
+      - "kafka"
+    ports:
+      - "8000:8000"
     environment:
       MYSQL_HOST: db:3306
       MYSQL_DATABASE: doorchat
@@ -11,21 +17,27 @@ services:
       KAFKA_GROUP_ID: deu-door-chat-server
 
   zookeeper:
+    container_name: zookeeper
     image: wurstmeister/zookeeper
     expose:
       - "2181"
 
   kafka:
+    container_name: kafka
     image: wurstmeister/kafka
+    depends_on:
+      - "zookeeper"
     ports:
       - "9092:9092"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: host.docker.internal
+      KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
   db:
+    container_name: db
     image: mysql
     ports:
       - "3306:3306"
