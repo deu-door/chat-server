@@ -2,7 +2,7 @@ version: "2"
 services:
   chat-server:
     container_name: chat-server
-    image: deu-door/chat-server
+    image: deudoor/chat-server
     depends_on:
       - "db"
       - "kafka"
