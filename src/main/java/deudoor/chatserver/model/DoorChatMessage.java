@@ -54,6 +54,6 @@ public class DoorChatMessage implements Serializable {
 
     @Override
     public String toString() {
-        return "DoorChatMessage [userId=" + userId + "user=" + user + ", message=" + message + "]";
+        return "DoorChatMessage [userId=" + userId + ", user=" + user + ", message=" + message + "]";
     }
 }
