@@ -37,4 +37,4 @@ RUN chmod +x ./wait-for-it.sh
 EXPOSE 8000
 
 # shell form
-ENTRYPOINT ./wait-for-it.sh $MYSQL_HOST -- java -jar /app.jar
+ENTRYPOINT ./wait-for-it.sh --timeout 30 $MYSQL_HOST -- java -jar /app.jar
