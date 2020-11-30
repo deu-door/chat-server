@@ -7,8 +7,9 @@ services:
       - "db"
       - "kafka"
     ports:
-      - "8000:8000"
+      - "8008:8008"
     environment:
+      SERVER_PORT: 8008
       MYSQL_HOST: db:3306
       MYSQL_DATABASE: doorchat
       MYSQL_USER: admin
