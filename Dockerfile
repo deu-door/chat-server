@@ -24,8 +24,17 @@ RUN ./gradlew bootJar
 
 FROM openjdk:14-alpine
 
+RUN apk update && apk add bash
+
+WORKDIR /
+
 COPY --from=build-stage build/libs/*.jar app.jar
+
+COPY wait-for-it.sh .
+
+RUN chmod +x ./wait-for-it.sh
 
 EXPOSE 8000
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# shell form
+ENTRYPOINT ./wait-for-it.sh $MYSQL_HOST -- java -jar /app.jar
